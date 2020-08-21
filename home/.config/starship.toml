@@ -1,0 +1,10 @@
+[hostname]
+ssh_only = false
+prefix = "<gcloud-container@"
+suffix = ">"
+style = "bold green"
+
+[kubernetes]
+symbol = "⛴  "
+style = "dimmed green"
+disabled = false
