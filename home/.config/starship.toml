@@ -1,8 +1,7 @@
 [hostname]
 ssh_only = false
-prefix = "<gcloud-container@"
-suffix = ">"
 style = "bold green"
+format = "<gcloud-container@[$hostname]($style)>"
 
 [kubernetes]
 symbol = "⛴  "

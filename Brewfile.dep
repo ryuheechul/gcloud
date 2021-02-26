@@ -1,5 +1,4 @@
 brew "patchelf"
-brew "binutils"
 brew "gmp"
 brew "isl@0.18"
 brew "libmpc"

@@ -1,6 +1,6 @@
-########## brew ###########
+##########  brew  ###########
 
-FROM linuxbrew/brew as brew
+FROM linuxbrew/brew:1.9.3 as brew
 
 RUN brew install perl
 RUN brew install starship
@@ -21,29 +21,24 @@ WORKDIR /home/linuxbrew/.linuxbrew
 RUN rm -rf ./Homebrew
 RUN rm -rf ./var
 
+##########  asdf  ###########
+
+FROM alpine:3.13 as asdf
+ENV PATH=/root/.asdf/bin:$PATH
+
+RUN apk update && apk add git curl bash
+RUN git clone https://github.com/asdf-vm/asdf.git /root/.asdf --branch v0.8.0
+COPY ./asdf-tool-versions /root/.tool-versions
+RUN asdf plugin add helm
+RUN cat /root/.tool-versions
+RUN asdf install
+
 ########## gcloud ###########
 
 FROM google/cloud-sdk:alpine
 ENV PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH \
 	SHELL=/bin/bash
 ENV USER root
-
-ENV HELM_VERSION="2.15.1"
-ENV HELM_3_VERSION="3.2.3"
-
-RUN curl -o /tmp/helm.tgz \
-      https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
-      && tar -zxvf /tmp/helm.tgz -C /tmp \
-      && chmod +x /tmp/linux-amd64/helm \
-      && mv /tmp/linux-amd64/helm /usr/local/bin/helm \
-      && rm -rf /tmp/*
-
-RUN curl -o /tmp/helm.tgz \
-      https://get.helm.sh/helm-v${HELM_3_VERSION}-linux-amd64.tar.gz \
-      && tar -zxvf /tmp/helm.tgz -C /tmp \
-      && chmod +x /tmp/linux-amd64/helm \
-      && mv /tmp/linux-amd64/helm /usr/local/bin/helm3 \
-      && rm -rf /tmp/*
 
 # for Homebrew stuff to work
 # check here to be up-to-date https://github.com/Linuxbrew/docker/blob/master/alpine/Dockerfile#L5-L6
@@ -54,5 +49,5 @@ RUN gcloud components install alpha beta kubectl
 
 RUN apk add make
 
-COPY --from=brew /home/linuxbrew/.linuxbrew \
-            /home/linuxbrew/.linuxbrew
+COPY --from=brew /home/linuxbrew/.linuxbrew /home/linuxbrew/.linuxbrew
+COPY --from=asdf /root/.asdf /root/.asdf
