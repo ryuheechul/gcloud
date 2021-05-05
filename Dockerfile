@@ -46,4 +46,4 @@ WORKDIR /home/gcloud
 ENV ASDF_DIR=/asdf-home/.asdf
 ENV ASDF_DATA_DIR=/home/gcloud/.asdf
 
-RUN git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0
+RUN git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0 || true

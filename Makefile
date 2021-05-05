@@ -4,6 +4,8 @@ cl-info := kubectl cluster-info
 
 shell:
 	$(dcrun) gcloud
+root-shell:
+	$(dcrun) gcloud-root
 cloud-shell:
 	$(dcrun) gcloud make shell
 build:
